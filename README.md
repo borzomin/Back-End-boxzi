@@ -1,4 +1,5 @@
 # Back-End-boxzi
+
 from flask import Flask, request, jsonify  
 import sqlite3  
 from datetime import datetime  
@@ -6,15 +7,18 @@ from datetime import datetime
 app = Flask(__name__)  
 
 # Create a connection to SQLite database  
+
 conn = sqlite3.connect('followers.db')  
 cursor = conn.cursor()  
 
 # Create a table to store user data  
+
 cursor.execute('''CREATE TABLE IF NOT EXISTS users  
                 (id INTEGER PRIMARY KEY, username TEXT, followers TEXT, following TEXT)''')  
 conn.commit()  
 
 # API for following a user  
+
 @app.route('/follow', methods=['POST'])  
 def follow_user():  
     data = request.get_json()  
@@ -35,7 +39,8 @@ def follow_user():
     return jsonify({"message": f"{follower} is now following {following}"}), 200  
 
 # API for unfollowing a user  
-@app.route('/unfollow', methods=['POST'])  
+
+app.route('/unfollow', methods=['POST'])  
 def unfollow_user():  
     data = request.get_json()  
     follower = data.get('follower')  
@@ -53,6 +58,7 @@ def unfollow_user():
     return jsonify({"message": f"{follower} has unfollowed {following}"}), 200  
 
 # API to get daily followers count of a user  
+
 @app.route('/followers_count/<username>', methods=['GET'])  
 def get_followers_count(username):  
     cursor.execute("SELECT followers FROM users WHERE username = ?", (username,))  
@@ -66,6 +72,7 @@ def get_followers_count(username):
     return jsonify({"followers_count": daily_followers_count}), 200  
 
 # API to get common followers of two users  
+
 @app.route('/common_followers', methods=['POST'])  
 def get_common_followers():  
     data = request.get_json()  
